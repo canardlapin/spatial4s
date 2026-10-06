@@ -4,6 +4,8 @@ sealed trait SpatialError derives CanEqual:
   def message: String
 
 object SpatialError:
+  final case class UnsupportedSpatialRank(actual: Int) extends SpatialError:
+    def message: String = s"only spatial ranks 2 and 3 are supported, got $actual"
   final case class InvalidIdentifier(kind: String, value: String) extends SpatialError:
     def message: String =
       s"$kind must be nonempty, normalized, and contain only stable identifier characters: '$value'"

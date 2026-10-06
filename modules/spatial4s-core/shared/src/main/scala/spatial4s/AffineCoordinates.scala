@@ -19,11 +19,13 @@ final class AffineCoordinates[D <: Dim] private (
   )(using dimension: Dimension[D]): Either[SpatialError, Vector[Double]] =
     CoordinateValidation
       .validate(coordinates)
-      .map(values =>
-        rows.map(row =>
-          values.indices
-            .map(axis => row(axis) * values(axis))
-            .sum + row.last
+      .flatMap(values =>
+        CoordinateValidation.computed(
+          rows.map(row =>
+            values.indices
+              .map(axis => row(axis) * values(axis))
+              .sum + row.last
+          )
         )
       )
 

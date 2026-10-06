@@ -55,7 +55,7 @@ final class Frame[D <: Dim] private (
   def sameRuntimeOwnerAs(other: Frame[?]): Boolean =
     runtimeToken.sameAs(other.runtimeToken)
 
-  private[spatial4s] def samePersistentKeyAs(other: Frame[?]): Boolean =
+  def samePersistentKeyAs(other: Frame[?]): Boolean =
     persistentKey.nonEmpty && persistentKey == other.persistentKey
 
   private[spatial4s] def identityDescription: String =
@@ -68,6 +68,10 @@ final class Frame[D <: Dim] private (
     s"Frame(${persistentId.fold("ephemeral")(_.value)}, ${metadata.label}, D$spatialRank, $unit, $convention)"
 
 object Frame:
+  type Registry = FrameRegistry
+  object Registry:
+    val empty: Registry = FrameRegistry.empty
+  type Resolution[D <: Dim] = FrameResolution[D]
   private final class RuntimeToken:
     def sameAs(other: RuntimeToken): Boolean =
       this eq other
@@ -173,6 +177,40 @@ object Frame:
   ] =
     FrameAlignment.check(left, right)
 
+  /** Explicit evidence for generic or widened endpoint types. Runtime identity remains
+    * checked on every transported value.
+    */
+  def alignOwners[D <: Dim, A <: Frame[D], B <: Frame[D]](
+      left: A,
+      right: B
+  ): Either[SpatialError, FrameAlignment[D, A, B]] =
+    FrameAlignment.checkOwners(left, right)
+
+  def restoreDynamic(
+      record: FrameRecord,
+      registry: FrameRegistry
+  ): Either[SpatialError, (SomeFrame, FrameRegistry)] =
+    record.key.spatialRank match
+      case 2 =>
+        restore[D2](record, registry).map(r => SomeFrame.pack(r.frame) -> r.registry)
+      case 3 =>
+        restore[D3](record, registry).map(r => SomeFrame.pack(r.frame) -> r.registry)
+      case rank => Left(SpatialError.UnsupportedSpatialRank(rank))
+
+sealed trait SomeFrame:
+  type D <: Dim
+  val dimension: Dimension[D]
+  val value: Frame[D]
+
+object SomeFrame:
+  private[spatial4s] def pack[A <: Dim](frame: Frame[A])(using
+      witness: Dimension[A]
+  ): SomeFrame { type D = A } =
+    new SomeFrame:
+      type D = A
+      val dimension = witness
+      val value = frame
+
 final class FrameRegistry private[spatial4s] (
     private[spatial4s] val entries: Map[FrameId, FrameRegistry.Entry]
 ):
@@ -255,6 +293,13 @@ final class FrameAlignment[
     inverse.vectorToRight(vector)
 
 object FrameAlignment:
+  private[spatial4s] def checkOwners[D <: Dim, A <: Frame[D], B <: Frame[D]](
+      left: A,
+      right: B
+  ): Either[SpatialError, FrameAlignment[D, A, B]] =
+    if left.sameRuntimeOwnerAs(right) || left.samePersistentKeyAs(right) then
+      Right(new FrameAlignment(left, right))
+    else Left(left.mismatchWith(right))
   def identity[D <: Dim, A <: Frame[D]](
       frame: A
   ): FrameAlignment[D, A, A] =
