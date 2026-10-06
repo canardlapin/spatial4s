@@ -169,6 +169,15 @@ operations or explicit alignment. Point and Vec are general coordinate values;
 packed domain fields store their frame once rather than storing a frame token
 per element.
 
+Computed coordinates retain the finite-coordinate invariant. Checked arithmetic
+and affine evaluation return `NonFiniteCoordinate` when Double arithmetic cannot
+represent a result. Direct arithmetic throws `ArithmeticException` for that
+case, and rejects mixed runtime owners with `IllegalArgumentException` if a
+generic frame refinement was widened. `Frame.alignOwners` provides explicit
+checked evidence for generic endpoint types; it never infers identity from labels.
+`Frame.restoreDynamic` returns a dimension witness and canonical registry owner
+for D2/D3 records, with an explicit unsupported-rank failure.
+
 ## Affine coordinate coefficients
 
 spatial4s owns a validated numeric primitive but not a typed transformation
