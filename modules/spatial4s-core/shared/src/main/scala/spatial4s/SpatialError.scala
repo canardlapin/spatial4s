@@ -81,6 +81,10 @@ object SpatialError:
 private[spatial4s] object ValidatedText:
   private val StableIdentifier =
     "^[A-Za-z][A-Za-z0-9._:-]*$".r
+  // Frame ids may also carry uppercase percent-escapes, so callers can embed
+  // escaped components in persistent ids without a second encoding.
+  private val FrameIdentifier =
+    "^[A-Za-z](?:[A-Za-z0-9._:-]|%[0-9A-F]{2})*$".r
 
   def identifier(
       kind: String,
@@ -89,6 +93,11 @@ private[spatial4s] object ValidatedText:
     value match
       case StableIdentifier() => Right(value)
       case _                  => Left(SpatialError.InvalidIdentifier(kind, value))
+
+  def frameIdentifier(value: String): Either[SpatialError, String] =
+    value match
+      case FrameIdentifier() => Right(value)
+      case _                 => Left(SpatialError.InvalidIdentifier("frame id", value))
 
   def symbol(value: String): Either[SpatialError, String] =
     if value.nonEmpty && value.trim == value then Right(value)

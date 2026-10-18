@@ -112,6 +112,13 @@ final class Frame[D <: Dim] private (...):
 `Frame.persistent` uses a caller-supplied `FrameId`; spatial4s never derives
 persistent identity from labels or hashes.
 
+A `FrameId` starts with an ASCII letter and continues with ASCII letters,
+digits, `.`, `_`, `:`, `-`, or an uppercase percent-escape `%HH`. The escape
+lets callers embed escaped components in an id without a second encoding.
+spatial4s treats ids as opaque text: it never decodes them, so `%41` and `A`
+are different ids. Quantity, unit, and convention identifiers do not admit
+escapes.
+
 A registry is a persistent threaded value, not a mutable global or concurrent
 memo:
 

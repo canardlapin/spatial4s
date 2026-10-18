@@ -4,7 +4,7 @@ opaque type FrameId = String
 
 object FrameId:
   def parse(value: String): Either[SpatialError, FrameId] =
-    ValidatedText.identifier("frame id", value)
+    ValidatedText.frameIdentifier(value)
 
   extension (id: FrameId) def value: String = id
 

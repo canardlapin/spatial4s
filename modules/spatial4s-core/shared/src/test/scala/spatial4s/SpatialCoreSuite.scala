@@ -15,6 +15,15 @@ class SpatialCoreSuite extends munit.FunSuite:
     assert(CoordinateUnit.custom("bad unit", "x", quantity, None).isLeft)
     assert(CoordinateConvention.custom(" scanner").isLeft)
 
+  test("frame ids admit uppercase percent-escapes and nothing looser"):
+    val escaped = "scalafim-world:native:ds:sub-01::k-v%007Cdigest%003Bq1%002Cs1"
+    assertEquals(right(FrameId.parse(escaped)).value, escaped)
+    assertEquals(right(FrameId.parse("a%20b")).value, "a%20b")
+    Vector("%41head", "head%", "head%4", "head%7c", "head%G1", "head 1", "head|1", "")
+      .foreach(value => assert(FrameId.parse(value).isLeft, value))
+    assert(CoordinateConvention.custom("RAS%20").isLeft)
+    assert(CoordinateQuantity.custom("length%20").isLeft)
+
   test("ephemeral and persistent frame identity remain distinct"):
     val ephemeral = right(Frame.named[D3]("ephemeral"))
     assertEquals(ephemeral.record, Left(SpatialError.EphemeralFrameHasNoRecord))
