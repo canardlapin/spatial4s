@@ -5,3 +5,7 @@ project/project/
 project/target/
 target/
 **/target/
+
+.mote/local/
+.mote/tmp/
+.mote/authority/
