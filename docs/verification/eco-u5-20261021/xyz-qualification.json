@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "source_revision": "f79674114dc5f1f88866708b74f7ea42e59895a8",
+  "qualification": "JVM and JS core 17 each, laws 3 each; 40 passed; no skipped cases.",
+  "review": {
+    "reviewer": "volume_view_astra_review",
+    "verdict": "APPROVE bounded source changes",
+    "scope": "Xyz.scala and XyzSuite.scala"
+  },
+  "retained_adverse_evidence": {
+    "01": "Linked worktree rejected by sbt-git/JGit at load; zero executed assertions.",
+    "02": "Core JVM 16 passed, one witness assumed unchecked Point overflow. Corrected test to assert existing checked overflow; implementation unchanged."
+  },
+  "logs": [
+    {
+      "path": "spatial4s-eco-u5-xyz-01.log.gz",
+      "raw_sha256": "2a3b0904c2dc11253d604f4641701fdef83330ffbd381ab16b45f75cd6a65359",
+      "metadata": {
+        "schema_version": 1,
+        "started_utc": "2026-10-21T17:19:53.981893+00:00",
+        "finished_utc": "2026-10-21T17:20:09.304098+00:00",
+        "duration_seconds": 15.32189,
+        "command": [
+          "python3",
+          "/Users/bbuchsbaum/code/scala/scalafim-eco-mesh-kernels-20261020/tools/build/sbt-warm",
+          "spatial4s-coreJVM/test",
+          "spatial4s-coreJS/test",
+          "spatial4s-lawsJVM/test",
+          "spatial4s-lawsJS/test"
+        ],
+        "cwd": "/Users/bbuchsbaum/code/scala/spatial4s-eco-u5-20261021",
+        "log": "/tmp/spatial4s-eco-u5-xyz-01.log",
+        "exit_code": 1,
+        "child_returncode": 1,
+        "reason": "exited",
+        "detail": null,
+        "timeout_seconds": 1800.0,
+        "log_bytes": 2480
+      }
+    },
+    {
+      "path": "spatial4s-eco-u5-xyz-02.log.gz",
+      "raw_sha256": "57bc9b7b4cc30514749796c874cebacf6097d64a55451fde9e02f8d016240851",
+      "metadata": {
+        "schema_version": 1,
+        "started_utc": "2026-10-21T17:26:38.151867+00:00",
+        "finished_utc": "2026-10-21T17:28:33.985435+00:00",
+        "duration_seconds": 115.832638,
+        "command": [
+          "env",
+          "JAVA_HOME=/Users/bbuchsbaum/Library/Java/JavaVirtualMachines/openjdk-22/Contents/Home",
+          "SBT_WARM_HEAP=3g",
+          "python3",
+          "/Users/bbuchsbaum/code/scala/scalafim-eco-mesh-kernels-20261020/tools/build/sbt-warm",
+          "spatial4s-coreJVM/test",
+          "spatial4s-coreJS/test",
+          "spatial4s-lawsJVM/test",
+          "spatial4s-lawsJS/test"
+        ],
+        "cwd": "/Users/bbuchsbaum/code/scala/spatial4s-eco-u5-xyz-qualification-20261021",
+        "log": "/tmp/spatial4s-eco-u5-xyz-02.log",
+        "exit_code": 1,
+        "child_returncode": 1,
+        "reason": "exited",
+        "detail": null,
+        "timeout_seconds": 1800.0,
+        "log_bytes": 2449
+      }
+    },
+    {
+      "path": "spatial4s-eco-u5-xyz-03.log.gz",
+      "raw_sha256": "ff7cc3d11d58919bedaa6eddc8898e6dca0f377b62501ef4a93212d7b0c97c0a",
+      "metadata": {
+        "schema_version": 1,
+        "started_utc": "2026-10-21T17:29:02.973425+00:00",
+        "finished_utc": "2026-10-21T17:29:19.584874+00:00",
+        "duration_seconds": 16.611052,
+        "command": [
+          "env",
+          "JAVA_HOME=/Users/bbuchsbaum/Library/Java/JavaVirtualMachines/openjdk-22/Contents/Home",
+          "SBT_WARM_HEAP=3g",
+          "python3",
+          "/Users/bbuchsbaum/code/scala/scalafim-eco-mesh-kernels-20261020/tools/build/sbt-warm",
+          "spatial4s-coreJVM/test",
+          "spatial4s-coreJS/test",
+          "spatial4s-lawsJVM/test",
+          "spatial4s-lawsJS/test"
+        ],
+        "cwd": "/Users/bbuchsbaum/code/scala/spatial4s-eco-u5-xyz-qualification-20261021",
+        "log": "/tmp/spatial4s-eco-u5-xyz-03.log",
+        "exit_code": 0,
+        "child_returncode": 0,
+        "reason": "exited",
+        "detail": null,
+        "timeout_seconds": 1800.0,
+        "log_bytes": 3180
+      }
+    }
+  ]
+}
