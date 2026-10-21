@@ -60,8 +60,9 @@ class XyzSuite extends munit.FunSuite:
     """)
     assert(errors.nonEmpty)
 
-  test("raw extraction refuses a nonfinite result of unchecked owned arithmetic"):
+  test("owned arithmetic refuses overflow before raw extraction"):
     val frame = right(Frame.named[D3]("overflow"))
     val point = right(Point.in(frame)(Double.MaxValue, 0.0, 0.0))
     val vector = right(Vec.in(frame)(Double.MaxValue, 0.0, 0.0))
-    assert(Xyz.fromPoint(point + vector).isLeft)
+    assertEquals(right(Xyz.fromPoint(point)), Xyz(Double.MaxValue, 0.0, 0.0))
+    intercept[ArithmeticException](point + vector)
